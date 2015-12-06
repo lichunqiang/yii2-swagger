@@ -1,0 +1,25 @@
+{
+  "name": "light/yii2-swagger",
+  "description": "swagger intergation with yii2",
+  "type": "library",
+  "keywords": ["yii2","extension","swagger","Restful","document"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "lichunqiang",
+      "email": "light-li@hotmail.com"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "*",
+    "bower-asset/swagger-ui": "^2.0"
+  },
+  "require-dev": {
+    "fabpot/php-cs-fixer": "^1.11"
+  },
+  "autoload": {
+    "psr-4": {
+      "light\\swagger\\": "src"
+    }
+  }
+}
