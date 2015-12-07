@@ -31,8 +31,6 @@ class SwaggerUIAsset extends AssetBundle
         'lib/highlight.7.3.pack.js',
         'lib/marked.js',
         'lib/swagger-oauth.js',
-        'lang/translator.js',
-        'lang/zh-cn.js',
     ];
 
     public $jsOptions = [
