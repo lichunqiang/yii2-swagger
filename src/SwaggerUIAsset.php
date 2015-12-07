@@ -40,9 +40,8 @@ class SwaggerUIAsset extends AssetBundle
     ];
 
     public $css = [
-        ['css/typography.css', 'media' => 'screen'],
+        'css/typography.css',
         'css/reset.css',
-        ['css/screen.css', 'media' => 'screen'],
-        ['css/print.css', 'media' => 'print'],
+        'css/screen.css',
     ];
 }
