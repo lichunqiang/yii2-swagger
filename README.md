@@ -1,7 +1,7 @@
 yii2-swagger
 ============
-[![version](https://img.shields.io/packagist/v/lichunqiang/yii2-swagger.svg?style=flat-square)](https://packagist.org/packages/lichunqiang/yii2-swagger)
-[![Download](https://img.shields.io/packagist/dd/lichunqiang/yii2-swagger.svg?style=flat-square)](https://packagist.org/packages/lichunqiang/yii2-swagger)
+[![version](https://img.shields.io/packagist/v/light/yii2-swagger.svg?style=flat-square)](https://packagist.org/packages/light/yii2-swagger)
+[![Download](https://img.shields.io/packagist/dd/light/yii2-swagger.svg?style=flat-square)](https://packagist.org/packages/light/yii2-swagger)
 [![Issues](https://img.shields.io/github/issues/lichunqiang/yii2-swagger.svg?style=flat-square)](https://github.com/lichunqiang/yii2-swagger/issues)
 
 swagger intergation with yii2
