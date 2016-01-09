@@ -14,27 +14,69 @@ namespace light\swagger;
 use Yii;
 use yii\web\Response;
 
+/**
+ * The api data output action.
+ *
+ * ~~~
+ * public function actions()
+ * {
+ *     return [
+ *         'api' => [
+ *             'class' => 'light\swagger\SwaggerApiAction',
+ *             'scanDir' => [
+ *                 Yii::getAlias('@api/modules/v1/swagger'),
+ *                 Yii::getAlias('@api/modules/v1/controllers'),
+ *                 ...
+ *             ]
+ *         ]
+ *     ];
+ * }
+ * ~~~
+ */
 class SwaggerApiAction extends \yii\base\Action
 {
     /**
-     * @var string|array|Symfony\Finder\Finder
+     * @var string|array|Symfony\Finder\Finder The directory(s) or filename(s).
+     * If you configrate the dirctory must be full path of the dirctory.
      */
     public $scanDir;
     /**
      * @var string api key, if setted will perform the authentication.
      */
     public $api_key;
-
     /**
      * @var string Query param to get api key.
      */
     public $apiKeyParam = 'api_key';
-
     /**
-     * @var array
+     * @var array The options passed to `Swagger`, Please refer the `Swagger\scan` function for more information.
      */
     public $scanOptions = [];
+    /**
+     * @var string The alias or full path of stable json file to store.
+     * When the api is stable, please set the option to enable to store the scan data to json file.
+     */
+    public $saveAs;
 
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        parent::init();
+
+        if ($this->saveAs) {
+            $this->saveAs = Yii::getAlias($this->saveAs);
+
+            if (is_dir($this->saveAs)) {
+                $this->saveAs .= '/swagger.json';
+            }
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function run()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -46,6 +88,12 @@ class SwaggerApiAction extends \yii\base\Action
 
         $swagger = \Swagger\scan($this->scanDir, $this->scanOptions);
 
+        if ($this->saveAs) {
+            if (!file_exists($this->saveAs)) {
+                $swagger->saveAs($this->saveAs);
+            }
+            return file_get_contents($this->saveAs);
+        }
         return $swagger;
     }
 }

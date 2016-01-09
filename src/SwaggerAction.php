@@ -13,8 +13,26 @@ namespace light\swagger;
 
 use yii\base\Action;
 
+/**
+ * The document display action.
+ *
+ * ~~~
+ * public function actions()
+ * {
+ *     return [
+ *         'doc' => [
+ *             'class' => 'light\swagger\SwaggerAction',
+ *             'restUrl' => Url::to(['site/api'], true)
+ *         ]
+ *     ];
+ * }
+ * ~~~
+ */
 class SwaggerAction extends Action
 {
+    /**
+     * @var string The rest url configuration.
+     */
     public $restUrl;
 
     public function run()
