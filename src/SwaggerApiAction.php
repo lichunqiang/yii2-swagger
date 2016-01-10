@@ -55,6 +55,7 @@ class SwaggerApiAction extends \yii\base\Action
     /**
      * @var string The alias or full path of stable json file to store.
      * When the api is stable, please set the option to enable to store the scan data to json file.
+     * Notice: Please make sure the directory is exists.
      */
     public $saveAs;
 
@@ -67,10 +68,6 @@ class SwaggerApiAction extends \yii\base\Action
 
         if ($this->saveAs) {
             $this->saveAs = Yii::getAlias($this->saveAs);
-
-            if (is_dir($this->saveAs)) {
-                $this->saveAs .= '/swagger.json';
-            }
         }
     }
 
@@ -79,8 +76,6 @@ class SwaggerApiAction extends \yii\base\Action
      */
     public function run()
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
         if (null !== $this->api_key
             && $this->api_key != Yii::$app->request->get($this->apiKeyParam)) {
             return ['errcode' => 404, 'errmsg' => 'Permission denied'];
@@ -94,6 +89,7 @@ class SwaggerApiAction extends \yii\base\Action
             }
             return file_get_contents($this->saveAs);
         }
+        Yii::$app->response->format = Response::FORMAT_JSON;
         return $swagger;
     }
 }
