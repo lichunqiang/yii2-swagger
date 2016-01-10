@@ -21,7 +21,7 @@ class SwaggerUIAsset extends AssetBundle
     public $js = [
         'lib/jquery-1.8.0.min.js',
         'lib/jquery.slideto.min.js',
-
+        'lib/jsoneditor.min.js',
         'lib/jquery.wiggle.min.js',
         'lib/jquery.ba-bbq.min.js',
         'lib/handlebars-2.0.0.js',
