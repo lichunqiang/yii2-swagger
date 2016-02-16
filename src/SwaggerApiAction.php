@@ -12,6 +12,7 @@
 namespace light\swagger;
 
 use Yii;
+use yii\base\Action;
 use yii\web\Response;
 
 /**
@@ -33,15 +34,15 @@ use yii\web\Response;
  * }
  * ~~~
  */
-class SwaggerApiAction extends \yii\base\Action
+class SwaggerApiAction extends Action
 {
     /**
-     * @var string|array|Symfony\Finder\Finder The directory(s) or filename(s).
-     * If you configrate the dirctory must be full path of the dirctory.
+     * @var string|array|\Symfony\Component\Finder\Finder The directory(s) or filename(s).
+     * If you configured the directory must be full path of the directory.
      */
     public $scanDir;
     /**
-     * @var string api key, if setted will perform the authentication.
+     * @var string api key, if configured will perform the authentication.
      */
     public $api_key;
     /**
