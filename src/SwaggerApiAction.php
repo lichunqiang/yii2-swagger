@@ -74,14 +74,15 @@ class SwaggerApiAction extends Action
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         if (null !== $this->api_key
-            && $this->api_key != Yii::$app->request->get($this->apiKeyParam)
+            && $this->api_key != Yii::$app->getRequest()->get($this->apiKeyParam)
         ) {
             return ['errcode' => 404, 'errmsg' => 'Permission denied'];
         }
 
-        if ($this->cache !== null) {
-            $cache = is_string($this->cache) ? Yii::$app->get($this->cache, false) : $this->cache;
+        $this->clearCache();
 
+        if ($this->cache !== null) {
+            $cache = $this->getCache();
             if (($swagger = $cache->get($this->cacheKey)) === false) {
                 $swagger = $this->getSwagger();
                 $cache->set($this->cacheKey, $swagger);
@@ -101,5 +102,25 @@ class SwaggerApiAction extends Action
     protected function getSwagger()
     {
         return \Swagger\scan($this->scanDir, $this->scanOptions);
+    }
+
+    /**
+     * @return Cache
+     * @throws \yii\base\InvalidConfigException
+     */
+    protected function getCache()
+    {
+        return is_string($this->cache) ? Yii::$app->get($this->cache, false) : $this->cache;
+    }
+
+    protected function clearCache()
+    {
+        $clearCache = Yii::$app->getRequest()->get('clear-cache', false);
+        if ($clearCache !== false) {
+            $this->getCache()->delete($this->cacheKey);
+
+            Yii::$app->response->content = 'Succeed clear swagger api cache.';
+            Yii::$app->end();
+        }
     }
 }
