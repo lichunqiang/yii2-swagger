@@ -78,6 +78,31 @@ public function actions()
 上[Demo](https://github.com/lichunqiang/yii2-swagger-demo)
 
 
+Caching
+-------
+
+```
+public function actions()
+{
+    return [
+        // ...
+        'api' => [
+            // ...
+            'cache' => 'cache',
+            'cacheKey' => 'api-swagger-cache', // default is 'api-swagger-cache'
+        ],
+    ];
+}
+```
+
+#### Clear cache
+
+Access clear cache url `YOUR_API_URL?clear-cache` or `YOUR_API_URL?api_key=YOUR_API_KEY&clear-cache`
+
+Example: `curl 'http://localhost/v1/swagger/api?clear-cache'`
+
+you will see: `Succeed clear swagger api cache.`
+
 License
 -------
 ![MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
