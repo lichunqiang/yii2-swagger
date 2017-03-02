@@ -11,16 +11,19 @@
     }
   ],
   "require": {
-    "yiisoft/yii2": "*",
+    "yiisoft/yii2": "^2.0.0",
     "zircote/swagger-php": "^2.0",
-    "bower-asset/swagger-ui": "2.1.4"
+    "bower-asset/swagger-ui": "2.2.4"
   },
-  "require-dev": {
-    "fabpot/php-cs-fixer": "^1.11"
-  },
+  "minimum-stability": "dev",
   "autoload": {
     "psr-4": {
       "light\\swagger\\": "src"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
     }
   }
 }
