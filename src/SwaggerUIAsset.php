@@ -46,20 +46,15 @@ class SwaggerUIAsset extends AssetBundle
         ],
         [
             'css/reset.css',
-            'media' => 'screen',
+            'media' => 'screen,print',
         ],
         [
             'css/screen.css',
             'media' => 'screen',
         ],
-        //the setting will be overload, maybe the yii's issue.
-        //[
-        //    'css/reset.css',
-        //    'media' => 'print',
-        //],
-        //[
-        //    'css/print.css',
-        //    'media' => 'print',
-        //],
+        [
+            'css/print.css',
+            'media' => 'print',
+        ],
     ];
 }
