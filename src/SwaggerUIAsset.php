@@ -19,16 +19,18 @@ class SwaggerUIAsset extends AssetBundle
     public $sourcePath = '@bower/swagger-ui/dist';
 
     public $js = [
+        'lib/object-assign-pollyfill.js',
         'lib/jquery-1.8.0.min.js',
         'lib/jquery.slideto.min.js',
-        'lib/jsoneditor.min.js',
         'lib/jquery.wiggle.min.js',
         'lib/jquery.ba-bbq.min.js',
-        'lib/handlebars-2.0.0.js',
-        'lib/underscore-min.js',
+        'lib/handlebars-4.0.5.js',
+        'lib/lodash.min.js',
         'lib/backbone-min.js',
         'swagger-ui.js',
-        'lib/highlight.7.3.pack.js',
+        'lib/highlight.9.1.0.pack.js',
+        'lib/highlight.9.1.0.pack_extended.js',
+        'lib/jsoneditor.min.js',
         'lib/marked.js',
         'lib/swagger-oauth.js',
     ];
@@ -41,5 +43,7 @@ class SwaggerUIAsset extends AssetBundle
         'css/typography.css',
         'css/reset.css',
         'css/screen.css',
+        'css/reset.css',
+        'css/print.css',
     ];
 }

@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d14e017c574ebdced23516ae7759b32d",
-    "content-hash": "afb35bf22749426e90982c5bd975933f",
+    "content-hash": "a863026bacd9df7068a465128c9c5777",
     "packages": [
         {
             "name": "bower-asset/jquery",
@@ -121,16 +120,16 @@
         },
         {
             "name": "bower-asset/swagger-ui",
-            "version": "v2.2.4",
+            "version": "v2.2.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swagger-api/swagger-ui.git",
-                "reference": "f7424a700989e89929e0404f12a8363cc8d27bfd"
+                "reference": "64dc3060b3700b12e466f8d67b7d7ec3574b015f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swagger-api/swagger-ui/zipball/f7424a700989e89929e0404f12a8363cc8d27bfd",
-                "reference": "f7424a700989e89929e0404f12a8363cc8d27bfd",
+                "url": "https://api.github.com/repos/swagger-api/swagger-ui/zipball/64dc3060b3700b12e466f8d67b7d7ec3574b015f",
+                "reference": "64dc3060b3700b12e466f8d67b7d7ec3574b015f",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -414,7 +413,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2016-07-16 12:58:58"
+            "time": "2016-07-16T12:58:58+00:00"
         },
         {
             "name": "symfony/finder",
@@ -675,7 +674,7 @@
                 "rest",
                 "service discovery"
             ],
-            "time": "2016-12-16 12:39:03"
+            "time": "2016-12-16T12:39:03+00:00"
         }
     ],
     "packages-dev": [],
