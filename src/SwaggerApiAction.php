@@ -13,8 +13,8 @@ namespace light\swagger;
 
 use Yii;
 use yii\base\Action;
-use yii\web\Response;
 use yii\caching\Cache;
+use yii\web\Response;
 
 /**
  * The api data output action.
@@ -59,28 +59,32 @@ class SwaggerApiAction extends Action
      * Cache the \Swagger\Scan
      */
     public $cache = null;
-
     /**
      * @var string Cache key
      * [[cache]] must not be null
      */
     public $cacheKey = 'api-swagger-cache';
-
+    
     /**
      * @inheritdoc
      */
     public function run()
     {
+        $this->initCors();
+        
         Yii::$app->response->format = Response::FORMAT_JSON;
-
+        
+        $headers = Yii::$app->getRequest()->getHeaders();
+        $requestApiKey = $headers->get($this->apiKeyParam, Yii::$app->getRequest()->get($this->apiKeyParam));
+        
         if (null !== $this->api_key
-            && $this->api_key != Yii::$app->getRequest()->get($this->apiKeyParam)
+            && $this->api_key != $requestApiKey
         ) {
-            return ['errcode' => 404, 'errmsg' => 'Permission denied'];
+            return $this->getNeedAuthResponse();
         }
-
+        
         $this->clearCache();
-
+        
         if ($this->cache !== null) {
             $cache = $this->getCache();
             if (($swagger = $cache->get($this->cacheKey)) === false) {
@@ -90,20 +94,51 @@ class SwaggerApiAction extends Action
         } else {
             $swagger = $this->getSwagger();
         }
-
+        
         return $swagger;
     }
-
+    
     /**
-     * Get swagger object
-     *
-     * @return \Swagger\Swagger
+     * Init cors.
      */
-    protected function getSwagger()
+    protected function initCors()
     {
-        return \Swagger\scan($this->scanDir, $this->scanOptions);
+        $headers = Yii::$app->getResponse()->getHeaders();
+        
+        $headers->set('Access-Control-Allow-Headers', 'Content-Type, api_key, Authorization');
+        $headers->set('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT');
+        $headers->set('Access-Control-Allow-Origin', '*');
+        $headers->set('Allow', 'OPTIONS,HEAD,GET');
     }
-
+    
+    /**
+     * @return array
+     */
+    protected function getNeedAuthResponse()
+    {
+        return [
+            'securityDefinitions' => [
+                'api_key' => ['in' => 'header', 'type' => 'apiKey', 'name' => 'api_key'],
+            ],
+            'swagger' => '2.0',
+            'schemes' => ['http'],
+            'info' => [
+                'title' => 'Please take authentication firstly.',
+            ],
+        ];
+    }
+    
+    protected function clearCache()
+    {
+        $clearCache = Yii::$app->getRequest()->get('clear-cache', false);
+        if ($clearCache !== false) {
+            $this->getCache()->delete($this->cacheKey);
+            
+            Yii::$app->response->content = 'Succeed clear swagger api cache.';
+            Yii::$app->end();
+        }
+    }
+    
     /**
      * @return Cache
      * @throws \yii\base\InvalidConfigException
@@ -112,15 +147,14 @@ class SwaggerApiAction extends Action
     {
         return is_string($this->cache) ? Yii::$app->get($this->cache, false) : $this->cache;
     }
-
-    protected function clearCache()
+    
+    /**
+     * Get swagger object
+     *
+     * @return \Swagger\Annotations\Swagger
+     */
+    protected function getSwagger()
     {
-        $clearCache = Yii::$app->getRequest()->get('clear-cache', false);
-        if ($clearCache !== false) {
-            $this->getCache()->delete($this->cacheKey);
-
-            Yii::$app->response->content = 'Succeed clear swagger api cache.';
-            Yii::$app->end();
-        }
+        return \Swagger\scan($this->scanDir, $this->scanOptions);
     }
 }

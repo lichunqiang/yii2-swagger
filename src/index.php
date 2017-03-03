@@ -4,6 +4,7 @@ use light\swagger\SwaggerUIAsset;
 
 SwaggerUIAsset::register($this);
 /** @var string $rest_url */
+/** @var array $oauthConfig */
  ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -35,14 +36,7 @@ SwaggerUIAsset::register($this);
                 supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
                 onComplete: function(swaggerApi, swaggerUi){
                     if(typeof initOAuth == "function") {
-                        initOAuth({
-                            clientId: "your-client-id",
-                            clientSecret: "your-client-secret-if-required",
-                            realm: "your-realms",
-                            appName: "your-app-name",
-                            scopeSeparator: " ",
-                            additionalQueryStringParams: {}
-                        });
+                        initOAuth(<?= json_encode($oauthConfig) ?>);
                     }
                     
                     if(window.SwaggerTranslator) {

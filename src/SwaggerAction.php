@@ -34,15 +34,31 @@ class SwaggerAction extends Action
      * @var string The rest url configuration.
      */
     public $restUrl;
-
+    /**
+     * @var array The OAuth configration
+     */
+    public $oauthConfiguration = [];
+    
     public function run()
     {
         $this->controller->layout = false;
-
+        
         $view = $this->controller->getView();
-
+        
+        if (empty($this->oauthConfiguration)) {
+            $this->oauthConfiguration = [
+                'clientId' => 'your-client-id',
+                'clientSecret' => 'your-client-secret-if-required',
+                'realm' => 'your-realms',
+                'appName' => 'your-app-name',
+                'scopeSeparator' => ' ',
+                'additionalQueryStringParams' => [],
+            ];
+        }
+        
         return $view->renderFile(__DIR__ . '/index.php', [
             'rest_url' => $this->restUrl,
+            'oauthConfig' => $this->oauthConfiguration,
         ], $this->controller);
     }
 }

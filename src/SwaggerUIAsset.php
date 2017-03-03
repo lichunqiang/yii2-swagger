@@ -17,7 +17,7 @@ use yii\web\View;
 class SwaggerUIAsset extends AssetBundle
 {
     public $sourcePath = '@bower/swagger-ui/dist';
-
+    
     public $js = [
         'lib/object-assign-pollyfill.js',
         'lib/jquery-1.8.0.min.js',
@@ -34,16 +34,32 @@ class SwaggerUIAsset extends AssetBundle
         'lib/marked.js',
         'lib/swagger-oauth.js',
     ];
-
+    
     public $jsOptions = [
         'position' => View::POS_HEAD,
     ];
-
+    
     public $css = [
-        'css/typography.css',
-        'css/reset.css',
-        'css/screen.css',
-        'css/reset.css',
-        'css/print.css',
+        [
+            'css/typography.css',
+            'media' => 'screen',
+        ],
+        [
+            'css/reset.css',
+            'media' => 'screen',
+        ],
+        [
+            'css/screen.css',
+            'media' => 'screen',
+        ],
+        //the setting will be overload, maybe the yii's issue.
+        //[
+        //    'css/reset.css',
+        //    'media' => 'print',
+        //],
+        //[
+        //    'css/print.css',
+        //    'media' => 'print',
+        //],
     ];
 }
