@@ -11,7 +11,9 @@
 
 namespace light\swagger;
 
+use Yii;
 use yii\base\Action;
+use yii\web\Response;
 
 /**
  * The document display action.
@@ -41,7 +43,7 @@ class SwaggerAction extends Action
     
     public function run()
     {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
+        Yii::$app->getResponse()->format = Response::FORMAT_HTML;
         
         $this->controller->layout = false;
         
