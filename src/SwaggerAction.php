@@ -41,6 +41,8 @@ class SwaggerAction extends Action
     
     public function run()
     {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_HTML;
+        
         $this->controller->layout = false;
         
         $view = $this->controller->getView();
