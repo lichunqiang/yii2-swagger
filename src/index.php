@@ -33,7 +33,7 @@ SwaggerUIAsset::register($this);
             window.swaggerUi = new SwaggerUi({
                 url: url,
                 dom_id: "swagger-ui-container",
-                supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+                supportedSubmitMethods: ['options', 'head', 'get', 'post', 'put', 'delete', 'patch'],
                 onComplete: function(swaggerApi, swaggerUi){
                     if(typeof initOAuth == "function") {
                         initOAuth(<?= json_encode($oauthConfig) ?>);
