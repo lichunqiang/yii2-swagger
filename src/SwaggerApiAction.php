@@ -118,7 +118,7 @@ class SwaggerApiAction extends Action
     {
         return [
             'securityDefinitions' => [
-                'api_key' => ['in' => 'header', 'type' => 'apiKey', 'name' => 'api_key'],
+                'api_key' => ['in' => 'header', 'type' => 'apiKey', 'name' => $this->apiKeyParam],
             ],
             'swagger' => '2.0',
             'schemes' => ['http'],
