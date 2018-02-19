@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace app\modules\api\assets;
+namespace light\swagger;
 
 use yii\web\AssetBundle;
 use yii\web\View;
