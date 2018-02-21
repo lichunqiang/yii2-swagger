@@ -27,6 +27,7 @@ use yii\web\Response;
  *         'doc' => [
  *             'class' => 'light\swagger\SwaggerAction',
  *             'restUrl' => Url::to(['site/api'], true)
+ *             'additionalAsset' => 'app\modules\api\assets\SwaggerUIAssetOverrides',
  *         ]
  *     ];
  * }
