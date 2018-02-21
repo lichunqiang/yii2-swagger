@@ -75,10 +75,10 @@ class SwaggerAction extends Action
     {
         if ($this->additionalAsset != null) {
             $additionalAsset = $this->additionalAsset;
-            if ($additionalAsset instanceof AssetBundle) {
+            if (class_exists($additionalAsset)) {
                 $additionalAsset::register($this->controller->view);
             } else {
-                throw new InvalidArgumentException("Not Asset");
+                throw new InvalidArgumentException("Not valid class");
             }
         }
 
