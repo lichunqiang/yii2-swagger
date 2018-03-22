@@ -36,7 +36,9 @@ use yii\web\Response;
 class SwaggerAction extends Action
 {
     /**
-     * @var string The rest url configuration.
+     * @var string|array The rest url configuration.
+     * Check documentation for more information.
+     * @doc https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md
      */
     public $restUrl;
     /**

@@ -84,7 +84,11 @@ SwaggerUIAssetOverrides::register($this);
 
         // Build a system
         const ui = SwaggerUIBundle({
+            <?php if (is_array($rest_url)) : ?>
+            urls: <?= json_encode($rest_url) ?>,
+            <?php else : ?>
             url: <?= json_encode($rest_url) ?>,
+            <?php endif; ?>
             dom_id: '#swagger-ui',
             deepLinking: true,
             presets: [
@@ -92,7 +96,8 @@ SwaggerUIAssetOverrides::register($this);
                 SwaggerUIStandalonePreset
             ],
             plugins: [
-                SwaggerUIBundle.plugins.DownloadUrl
+                SwaggerUIBundle.plugins.DownloadUrl,
+                SwaggerUIBundle.plugins.Topbar
             ],
             layout: "StandaloneLayout"
         })
