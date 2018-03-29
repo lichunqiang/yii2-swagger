@@ -20,6 +20,7 @@ use yii\web\Response;
 /**
  * The document display action.
  *
+ * To use url property
  * ~~~
  * public function actions()
  * {
@@ -27,6 +28,28 @@ use yii\web\Response;
  *         'doc' => [
  *             'class' => 'light\swagger\SwaggerAction',
  *             'restUrl' => Url::to(['site/api'], true)
+ *             'additionalAsset' => 'app\modules\api\assets\SwaggerUIAssetOverrides',
+ *         ]
+ *     ];
+ * }
+ *
+ * To use urls property
+ *
+ * public function actions()
+ * {
+ *     return [
+ *         'doc' => [
+ *             'class' => 'light\swagger\SwaggerAction',
+ *             'restUrl' => [
+ *                 [
+ *                     'name' => 'API V1',
+ *                     'url' => Url::to(['/site/api-v1'], true),
+ *                 ],
+ *                 [
+ *                     'name' => 'API V2',
+ *                     'url' => Url::to(['/site/api-v2'], true),
+ *                 ],
+ *             ],
  *             'additionalAsset' => 'app\modules\api\assets\SwaggerUIAssetOverrides',
  *         ]
  *     ];
