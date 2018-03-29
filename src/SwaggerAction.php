@@ -14,7 +14,6 @@ namespace light\swagger;
 use Yii;
 use yii\base\Action;
 use yii\base\InvalidArgumentException;
-use yii\web\AssetBundle;
 use yii\web\Response;
 
 /**

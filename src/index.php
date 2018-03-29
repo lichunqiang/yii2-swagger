@@ -1,10 +1,8 @@
 <?php
 
 use light\swagger\SwaggerUIAsset;
-use light\swagger\SwaggerUIAssetOverrides;
 
 SwaggerUIAsset::register($this);
-SwaggerUIAssetOverrides::register($this);
 
 /** @var string $rest_url */
 /** @var array $oauthConfig */

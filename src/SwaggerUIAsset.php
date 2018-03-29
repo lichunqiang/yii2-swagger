@@ -12,7 +12,6 @@
 namespace light\swagger;
 
 use yii\web\AssetBundle;
-use yii\web\View;
 
 class SwaggerUIAsset extends AssetBundle
 {
