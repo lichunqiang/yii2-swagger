@@ -13,11 +13,13 @@ namespace light\swagger;
 
 use Yii;
 use yii\base\Action;
+use yii\base\InvalidArgumentException;
 use yii\web\Response;
 
 /**
  * The document display action.
  *
+ * To use url property
  * ~~~
  * public function actions()
  * {
@@ -25,6 +27,29 @@ use yii\web\Response;
  *         'doc' => [
  *             'class' => 'light\swagger\SwaggerAction',
  *             'restUrl' => Url::to(['site/api'], true)
+ *             'additionalAsset' => 'app\modules\api\assets\SwaggerUIAssetOverrides',
+ *         ]
+ *     ];
+ * }
+ *
+ * To use urls property
+ *
+ * public function actions()
+ * {
+ *     return [
+ *         'doc' => [
+ *             'class' => 'light\swagger\SwaggerAction',
+ *             'restUrl' => [
+ *                 [
+ *                     'name' => 'API V1',
+ *                     'url' => Url::to(['/site/api-v1'], true),
+ *                 ],
+ *                 [
+ *                     'name' => 'API V2',
+ *                     'url' => Url::to(['/site/api-v2'], true),
+ *                 ],
+ *             ],
+ *             'additionalAsset' => 'app\modules\api\assets\SwaggerUIAssetOverrides',
  *         ]
  *     ];
  * }
@@ -33,22 +58,26 @@ use yii\web\Response;
 class SwaggerAction extends Action
 {
     /**
-     * @var string The rest url configuration.
+     * @var string|array The rest url configuration.
+     * Check documentation for more information.
+     * @doc https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md
      */
     public $restUrl;
     /**
      * @var array The OAuth configration
      */
     public $oauthConfiguration = [];
-    
+
+    public $additionalAsset;
+
     public function run()
     {
         Yii::$app->getResponse()->format = Response::FORMAT_HTML;
-        
+
         $this->controller->layout = false;
-        
+
         $view = $this->controller->getView();
-        
+
         if (empty($this->oauthConfiguration)) {
             $this->oauthConfiguration = [
                 'clientId' => 'your-client-id',
@@ -59,10 +88,24 @@ class SwaggerAction extends Action
                 'additionalQueryStringParams' => [],
             ];
         }
-        
+
         return $view->renderFile(__DIR__ . '/index.php', [
             'rest_url' => $this->restUrl,
             'oauthConfig' => $this->oauthConfiguration,
         ], $this->controller);
+    }
+
+    protected function beforeRun()
+    {
+        if ($this->additionalAsset != null) {
+            $additionalAsset = $this->additionalAsset;
+            if (class_exists($additionalAsset)) {
+                $additionalAsset::register($this->controller->view);
+            } else {
+                throw new InvalidArgumentException("Not valid class");
+            }
+        }
+
+        return parent::beforeRun();
     }
 }
