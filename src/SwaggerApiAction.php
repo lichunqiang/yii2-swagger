@@ -14,6 +14,8 @@ namespace light\swagger;
 use Yii;
 use yii\base\Action;
 use yii\caching\Cache;
+use yii\caching\CacheInterface;
+use yii\di\Instance;
 use yii\web\Response;
 
 /**
@@ -44,10 +46,11 @@ class SwaggerApiAction extends Action
     public $scanDir;
     /**
      * @var string api key, if configured will perform the authentication.
+     * @deprecated
      */
     public $api_key;
     /**
-     * @var string Query param to get api key.
+     * @var string The `apiKey` name specified.
      */
     public $apiKeyParam = 'api_key';
     /**
@@ -58,7 +61,12 @@ class SwaggerApiAction extends Action
      * @var Cache|string|null the cache object or the ID of the cache application component that is used to store
      * Cache the \Swagger\Scan
      */
-    public $cache = null;
+    public $cache = 'cache';
+    /**
+     * @var bool If enable caching the scan result.
+     * @since 2.0.0
+     */
+    public $enableCache = false;
     /**
      * @var string Cache key
      * [[cache]] must not be null
@@ -66,30 +74,28 @@ class SwaggerApiAction extends Action
     public $cacheKey = 'api-swagger-cache';
     
     /**
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function init()
+    {
+        $this->cache = Instance::ensure($this->cache, CacheInterface::class);
+    
+        $this->initCors();
+    }
+    
+    /**
      * @inheritdoc
      */
     public function run()
     {
-        $this->initCors();
-        
         Yii::$app->response->format = Response::FORMAT_JSON;
-        
-        $headers = Yii::$app->getRequest()->getHeaders();
-        $requestApiKey = $headers->get($this->apiKeyParam, Yii::$app->getRequest()->get($this->apiKeyParam));
-        
-        if (null !== $this->api_key
-            && $this->api_key != $requestApiKey
-        ) {
-            return $this->getNeedAuthResponse();
-        }
         
         $this->clearCache();
         
-        if ($this->cache !== null) {
-            $cache = $this->getCache();
-            if (($swagger = $cache->get($this->cacheKey)) === false) {
+        if ($this->enableCache) {
+            if (($swagger = $this->cache->get($this->cacheKey)) === false) {
                 $swagger = $this->getSwagger();
-                $cache->set($this->cacheKey, $swagger);
+                $this->cache->set($this->cacheKey, $swagger);
             }
         } else {
             $swagger = $this->getSwagger();
@@ -105,47 +111,29 @@ class SwaggerApiAction extends Action
     {
         $headers = Yii::$app->getResponse()->getHeaders();
         
-        $headers->set('Access-Control-Allow-Headers', 'Content-Type, api_key, Authorization');
+        $headers->set('Access-Control-Allow-Headers', implode(', ', [
+            'Content-Type',
+            $this->apiKeyParam,
+            'Authorization',
+        ]));
         $headers->set('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT');
         $headers->set('Access-Control-Allow-Origin', '*');
-        $headers->set('Allow', 'OPTIONS,HEAD,GET');
     }
     
-    /**
-     * @return array
+    /**s
+     *
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\base\ExitException
      */
-    protected function getNeedAuthResponse()
-    {
-        return [
-            'securityDefinitions' => [
-                'api_key' => ['in' => 'header', 'type' => 'apiKey', 'name' => $this->apiKeyParam],
-            ],
-            'swagger' => '2.0',
-            'schemes' => ['http'],
-            'info' => [
-                'title' => 'Please take authentication firstly.',
-            ],
-        ];
-    }
-    
     protected function clearCache()
     {
         $clearCache = Yii::$app->getRequest()->get('clear-cache', false);
         if ($clearCache !== false) {
-            $this->getCache()->delete($this->cacheKey);
+            $this->cache->delete($this->cacheKey);
             
             Yii::$app->response->content = 'Succeed clear swagger api cache.';
             Yii::$app->end();
         }
-    }
-    
-    /**
-     * @return Cache
-     * @throws \yii\base\InvalidConfigException
-     */
-    protected function getCache()
-    {
-        return is_string($this->cache) ? Yii::$app->get($this->cache, false) : $this->cache;
     }
     
     /**

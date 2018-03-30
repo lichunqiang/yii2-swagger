@@ -14,6 +14,9 @@ namespace light\swagger;
 use yii\web\AssetBundle;
 use yii\web\View;
 
+/**
+ * Assets bundle for swagger-ui.
+ */
 class SwaggerUIAsset extends AssetBundle
 {
     public $sourcePath = '@bower/swagger-ui/dist';

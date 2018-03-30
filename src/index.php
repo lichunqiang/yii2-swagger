@@ -1,13 +1,13 @@
 <?php
 
 use light\swagger\SwaggerUIAsset;
-use light\swagger\SwaggerUIAssetOverrides;
+use yii\helpers\Json;
 
 SwaggerUIAsset::register($this);
-SwaggerUIAssetOverrides::register($this);
 
-/** @var string $rest_url */
-/** @var array $oauthConfig */
+/** @var string $configurations */
+/** @var string $title */
+/** @var array $oauthConfiguration */
 
 ?><!-- HTML for static distribution bundle build -->
 <?php $this->beginPage() ?>
@@ -15,8 +15,8 @@ SwaggerUIAssetOverrides::register($this);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Swagger UI</title>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700" rel="stylesheet">
+    <title><?= $title ?></title>
+    <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700" rel="stylesheet">-->
     <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
     <style>
@@ -81,28 +81,11 @@ SwaggerUIAssetOverrides::register($this);
 <?php $this->endBody() ?>
 <script>
     window.onload = function() {
-
         // Build a system
-        const ui = SwaggerUIBundle({
-            <?php if (is_array($rest_url)) : ?>
-            urls: <?= json_encode($rest_url) ?>,
-            <?php else : ?>
-            url: <?= json_encode($rest_url) ?>,
-            <?php endif; ?>
-            dom_id: '#swagger-ui',
-            deepLinking: true,
-            presets: [
-                SwaggerUIBundle.presets.apis,
-                SwaggerUIStandalonePreset
-            ],
-            plugins: [
-                SwaggerUIBundle.plugins.DownloadUrl,
-                SwaggerUIBundle.plugins.Topbar
-            ],
-            layout: "StandaloneLayout"
-        })
-
-        window.ui = ui
+        window.ui = SwaggerUIBundle(<?= $configurations ?>);
+        <?php if ($oauthConfiguration) :?>
+        window.ui.initOAuth(<?= Json::encode($oauthConfiguration) ?>);
+        <?php endif; ?>
     }
 </script>
 </body>
