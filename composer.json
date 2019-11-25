@@ -12,10 +12,10 @@
   ],
   "require": {
     "yiisoft/yii2": "^2.0.0",
-    "zircote/swagger-php": "^2.0",
+    "zircote/swagger-php": "^3.0",
     "bower-asset/swagger-ui": "^3.0"
   },
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "autoload": {
     "psr-4": {
       "light\\swagger\\": "src"
@@ -25,5 +25,17 @@
     "branch-alias": {
       "dev-master": "2.0.x-dev"
     }
-  }
+  },
+  "config": {
+    "process-timeout": 1800,
+    "fxp-asset": {
+      "enabled": false
+    }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ]
 }
