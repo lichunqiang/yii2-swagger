@@ -15,7 +15,6 @@ use Yii;
 use yii\base\Action;
 use yii\base\InvalidArgumentException;
 use yii\helpers\Json;
-use yii\web\AssetBundle;
 use yii\web\JsExpression;
 use yii\web\Response;
 
@@ -168,7 +167,7 @@ class SwaggerAction extends Action
     {
         if ($this->additionalAsset != null) {
             $additionalAsset = $this->additionalAsset;
-            if (class_exists($additionalAsset)) {
+            if (class_exists($additionalAsset) and method_exists($additionalAsset, 'register')) {
                 $additionalAsset::register($this->controller->getView());
             } else {
                 throw new InvalidArgumentException('Not valid class');

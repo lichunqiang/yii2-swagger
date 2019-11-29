@@ -11,12 +11,17 @@
 
 namespace light\swagger;
 
+use OpenApi\Annotations\OpenApi;
+use Symfony\Component\Finder\Finder;
 use Yii;
 use yii\base\Action;
+use yii\base\ExitException;
+use yii\base\InvalidConfigException;
 use yii\caching\Cache;
 use yii\caching\CacheInterface;
 use yii\di\Instance;
 use yii\web\Response;
+use function OpenApi\scan;
 
 /**
  * The api data output action.
@@ -40,7 +45,7 @@ use yii\web\Response;
 class SwaggerApiAction extends Action
 {
     /**
-     * @var string|array|\Symfony\Component\Finder\Finder The directory(s) or filename(s).
+     * @var string|array|Finder The directory(s) or filename(s).
      * If you configured the directory must be full path of the directory.
      */
     public $scanDir;
@@ -74,7 +79,7 @@ class SwaggerApiAction extends Action
     public $cacheKey = 'api-swagger-cache';
     
     /**
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function init()
     {
@@ -85,6 +90,9 @@ class SwaggerApiAction extends Action
     
     /**
      * @inheritdoc
+     *
+     * @throws ExitException
+     * @throws InvalidConfigException
      */
     public function run()
     {
@@ -119,11 +127,10 @@ class SwaggerApiAction extends Action
         $headers->set('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT');
         $headers->set('Access-Control-Allow-Origin', '*');
     }
-    
-    /**s
+
+    /**
      *
-     * @throws \yii\base\InvalidConfigException
-     * @throws \yii\base\ExitException
+     * @throws ExitException
      */
     protected function clearCache()
     {
@@ -139,10 +146,10 @@ class SwaggerApiAction extends Action
     /**
      * Get swagger object
      *
-     * @return \Swagger\Annotations\Swagger
+     * @return OpenApi
      */
     protected function getSwagger()
     {
-        return \Swagger\scan($this->scanDir, $this->scanOptions);
+        return scan($this->scanDir, $this->scanOptions);
     }
 }
