@@ -10,7 +10,7 @@
 [![Download](https://img.shields.io/packagist/dt/light/yii2-swagger.svg?style=flat-square)](https://packagist.org/packages/light/yii2-swagger)
 [![Issues](https://img.shields.io/github/issues/lichunqiang/yii2-swagger.svg?style=flat-square)](https://github.com/lichunqiang/yii2-swagger/issues)
 
-[swagger-php](https://github.com/zircote/swagger-php) intergation with yii2.
+[swagger-php](https://github.com/zircote/swagger-php) integration with yii2.
 
 
 Integration [swagger-ui](https://github.com/swagger-api/swagger-ui) with [swagger-php](https://github.com/zircote/swagger-php).
