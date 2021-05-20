@@ -24,13 +24,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist light/yii2-swagger "~1.0.4" --dev
+php composer.phar require --prefer-dist light/yii2-swagger "~3.0" --dev
 ```
 
 or add
 
 ```
-"light/yii2-swagger": "~1.0.4"
+"light/yii2-swagger": "~3.0"
 ```
 
 to the require section of your `composer.json` file.
