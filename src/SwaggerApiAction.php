@@ -11,7 +11,8 @@
 
 namespace light\swagger;
 
-use OpenApi\Annotations\OpenApi;
+use OpenApi\Generator;
+use OpenApi\Util;
 use Symfony\Component\Finder\Finder;
 use Yii;
 use yii\base\Action;
@@ -20,8 +21,8 @@ use yii\base\InvalidConfigException;
 use yii\caching\Cache;
 use yii\caching\CacheInterface;
 use yii\di\Instance;
+use yii\helpers\ArrayHelper;
 use yii\web\Response;
-use function OpenApi\scan;
 
 /**
  * The api data output action.
@@ -77,17 +78,17 @@ class SwaggerApiAction extends Action
      * [[cache]] must not be null
      */
     public $cacheKey = 'api-swagger-cache';
-    
+
     /**
      * @throws InvalidConfigException
      */
     public function init()
     {
         $this->cache = Instance::ensure($this->cache, CacheInterface::class);
-    
+
         $this->initCors();
     }
-    
+
     /**
      * @inheritdoc
      *
@@ -97,9 +98,9 @@ class SwaggerApiAction extends Action
     public function run()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        
+
         $this->clearCache();
-        
+
         if ($this->enableCache) {
             if (($swagger = $this->cache->get($this->cacheKey)) === false) {
                 $swagger = $this->getSwagger();
@@ -108,17 +109,17 @@ class SwaggerApiAction extends Action
         } else {
             $swagger = $this->getSwagger();
         }
-        
+
         return $swagger;
     }
-    
+
     /**
      * Init cors.
      */
     protected function initCors()
     {
         $headers = Yii::$app->getResponse()->getHeaders();
-        
+
         $headers->set('Access-Control-Allow-Headers', implode(', ', [
             'Content-Type',
             $this->apiKeyParam,
@@ -137,12 +138,12 @@ class SwaggerApiAction extends Action
         $clearCache = Yii::$app->getRequest()->get('clear-cache', false);
         if ($clearCache !== false) {
             $this->cache->delete($this->cacheKey);
-            
+
             Yii::$app->response->content = 'Succeed clear swagger api cache.';
             Yii::$app->end();
         }
     }
-    
+
     /**
      * Get swagger object
      *
@@ -150,6 +151,8 @@ class SwaggerApiAction extends Action
      */
     protected function getSwagger()
     {
-        return scan($this->scanDir, $this->scanOptions);
+        $exclude = ArrayHelper::getValue($this->scanOptions, 'exclude');
+        $pattern = ArrayHelper::getValue($this->scanOptions, 'pattern');
+        return Generator::scan(Util::finder($this->scanDir, $exclude, $pattern), $this->scanOptions);
     }
 }
