@@ -3,7 +3,7 @@
 use light\swagger\SwaggerUIAsset;
 use yii\helpers\Json;
 
-SwaggerUIAsset::register($this);
+$bundle = SwaggerUIAsset::register($this);
 
 /** @var string $configurations */
 /** @var string $title */
@@ -17,8 +17,8 @@ SwaggerUIAsset::register($this);
     <meta charset="UTF-8">
     <title><?= $title ?></title>
     <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700" rel="stylesheet">-->
-    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="<?= $bundle->baseUrl ?>/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="<?= $bundle->baseUrl ?>/favicon-16x16.png" sizes="16x16" />
     <style>
         html
         {
