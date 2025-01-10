@@ -12,7 +12,7 @@
   ],
   "require": {
     "yiisoft/yii2": "^2.0.0",
-    "zircote/swagger-php": "^4.0",
+    "zircote/swagger-php": "^5.0",
     "bower-asset/swagger-ui": "^5.0"
   },
   "minimum-stability": "stable",
