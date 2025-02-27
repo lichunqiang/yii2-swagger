@@ -2,6 +2,7 @@
 
 use light\swagger\SwaggerUIAsset;
 use yii\helpers\Json;
+use yii\web\View;
 
 $bundle = SwaggerUIAsset::register($this);
 
@@ -79,15 +80,17 @@ $bundle = SwaggerUIAsset::register($this);
 
 <div id="swagger-ui"></div>
 <?php $this->endBody() ?>
-<script>
+<?php
+$oauthConfiguration = ($oauthConfiguration) ? Json::encode($oauthConfiguration) : 'null';
+$this->registerJs(<<<JS
     window.onload = function() {
         // Build a system
-        window.ui = SwaggerUIBundle(<?= $configurations ?>);
-        <?php if ($oauthConfiguration) :?>
-        window.ui.initOAuth(<?= Json::encode($oauthConfiguration) ?>);
-        <?php endif; ?>
+        window.ui = SwaggerUIBundle($configurations);
+        if ($oauthConfiguration !== null) {
+        window.ui.initOAuth($oauthConfiguration);
+        }
     }
-</script>
+JS, View::POS_END); ?>
 </body>
 
 </html>
