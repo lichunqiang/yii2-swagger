@@ -11,8 +11,12 @@
 
 namespace light\swagger;
 
+use OpenApi\Analysis;
+use OpenApi\Context;
 use OpenApi\Generator;
-use OpenApi\Util;
+use OpenApi\Loggers\DefaultLogger;
+use OpenApi\SourceFinder;
+use OpenApi\Annotations\OpenApi;
 use Symfony\Component\Finder\Finder;
 use Yii;
 use yii\base\Action;
@@ -60,7 +64,7 @@ class SwaggerApiAction extends Action
      */
     public $apiKeyParam = 'api_key';
     /**
-     * @var array The options passed to `Swagger`, Please refer the `Swagger\scan` function for more information.
+     * @var array The options passed to `Swagger`, Please refer the `Swagger\generate` function for more information.
      */
     public $scanOptions = [];
     /**
@@ -152,7 +156,15 @@ class SwaggerApiAction extends Action
     protected function getSwagger()
     {
         $exclude = ArrayHelper::getValue($this->scanOptions, 'exclude');
-        $pattern = ArrayHelper::getValue($this->scanOptions, 'pattern');
-        return Generator::scan(Util::finder($this->scanDir, $exclude, $pattern), $this->scanOptions);
+        $pattern = ArrayHelper::getValue($this->scanOptions, 'pattern',  '*.php');
+        $version = ArrayHelper::getValue($this->scanOptions, 'version', OpenApi::VERSION_3_0_0);
+        $logger = ArrayHelper::getValue($this->scanOptions, 'logger', new DefaultLogger());
+        $analysis = ArrayHelper::getValue($this->scanOptions, 'analysis');
+        $validate = ArrayHelper::getValue($this->scanOptions, 'validate', true);
+        $sourceFinder = new SourceFinder($this->scanDir, $exclude, $pattern);
+        return (new Generator($logger))
+            ->setVersion($version)
+            ->generate($sourceFinder, $analysis, $validate);
     }
+
 }
