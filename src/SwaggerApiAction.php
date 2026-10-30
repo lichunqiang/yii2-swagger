@@ -11,12 +11,10 @@
 
 namespace light\swagger;
 
-use OpenApi\Analysis;
-use OpenApi\Context;
-use OpenApi\Generator;
-use OpenApi\Loggers\DefaultLogger;
-use OpenApi\SourceFinder;
 use OpenApi\Annotations\OpenApi;
+use OpenApi\Builder;
+use OpenApi\Loggers\CollectingLogger;
+use OpenApi\Utils\SourceFinder;
 use Symfony\Component\Finder\Finder;
 use Yii;
 use yii\base\Action;
@@ -151,20 +149,21 @@ class SwaggerApiAction extends Action
     /**
      * Get swagger object
      *
-     * @return OpenApi
+     * @return array
      */
     protected function getSwagger()
     {
         $exclude = ArrayHelper::getValue($this->scanOptions, 'exclude');
         $pattern = ArrayHelper::getValue($this->scanOptions, 'pattern',  '*.php');
         $version = ArrayHelper::getValue($this->scanOptions, 'version', OpenApi::VERSION_3_0_0);
-        $logger = ArrayHelper::getValue($this->scanOptions, 'logger', new DefaultLogger());
-        $analysis = ArrayHelper::getValue($this->scanOptions, 'analysis');
-        $validate = ArrayHelper::getValue($this->scanOptions, 'validate', true);
+        $logger = ArrayHelper::getValue($this->scanOptions, 'logger', new CollectingLogger());
         $sourceFinder = new SourceFinder($this->scanDir, $exclude, $pattern);
-        return (new Generator($logger))
+        return (new Builder())
+            ->setLogger($logger)
             ->setVersion($version)
-            ->generate($sourceFinder, $analysis, $validate);
+            ->addSource($sourceFinder)
+            ->build()
+            ->toArray();
     }
 
 }
