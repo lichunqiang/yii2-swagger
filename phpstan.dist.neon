@@ -1,0 +1,21 @@
+includes:
+    - vendor/mspirkov/yii2-phpstan/extension.neon
+
+parameters:
+    level: max
+
+    paths:
+        - src
+
+    bootstrapFiles:
+        - vendor/yiisoft/yii2/Yii.php
+
+    mspirkovYii2:
+        enableAllRules: false
+        enableValidationRules: true
+        yiiAppTypes:
+            -
+                paths:
+                - src
+                type: yii\web\Application
+                nullable: false

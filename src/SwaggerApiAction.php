@@ -15,12 +15,11 @@ use OpenApi\Annotations\OpenApi;
 use OpenApi\Builder;
 use OpenApi\Loggers\CollectingLogger;
 use OpenApi\Utils\SourceFinder;
-use Symfony\Component\Finder\Finder;
+use Psr\Log\LoggerInterface;
 use Yii;
 use yii\base\Action;
 use yii\base\ExitException;
 use yii\base\InvalidConfigException;
-use yii\caching\Cache;
 use yii\caching\CacheInterface;
 use yii\di\Instance;
 use yii\helpers\ArrayHelper;
@@ -44,11 +43,15 @@ use yii\web\Response;
  *     ];
  * }
  * ~~~
+ *
+ * @property-read CacheInterface $cache the cache object that is used to store Cache the \Swagger\Scan
+ * @property-write CacheInterface|string $cache the cache object or the ID of the cache application component
+ * that is used to store Cache the \Swagger\Scan
  */
 class SwaggerApiAction extends Action
 {
     /**
-     * @var string|array|Finder The directory(s) or filename(s).
+     * @var string|list<string> The directory(s) or filename(s).
      * If you configured the directory must be full path of the directory.
      */
     public $scanDir;
@@ -62,11 +65,12 @@ class SwaggerApiAction extends Action
      */
     public $apiKeyParam = 'api_key';
     /**
-     * @var array The options passed to `Swagger`, Please refer the `Swagger\generate` function for more information.
+     * @var array<string, mixed> The options passed to `Swagger`, Please refer the `Swagger\generate` function
+     * for more information.
      */
     public $scanOptions = [];
     /**
-     * @var Cache|string|null the cache object or the ID of the cache application component that is used to store
+     * @var CacheInterface|string the cache object or the ID of the cache application component that is used to store
      * Cache the \Swagger\Scan
      */
     public $cache = 'cache';
@@ -83,6 +87,7 @@ class SwaggerApiAction extends Action
 
     /**
      * @throws InvalidConfigException
+     * @return void
      */
     public function init()
     {
@@ -96,6 +101,8 @@ class SwaggerApiAction extends Action
      *
      * @throws ExitException
      * @throws InvalidConfigException
+     *
+     * @return mixed
      */
     public function run()
     {
@@ -117,6 +124,7 @@ class SwaggerApiAction extends Action
 
     /**
      * Init cors.
+     * @return void
      */
     protected function initCors()
     {
@@ -132,8 +140,8 @@ class SwaggerApiAction extends Action
     }
 
     /**
-     *
      * @throws ExitException
+     * @return void
      */
     protected function clearCache()
     {
@@ -149,14 +157,22 @@ class SwaggerApiAction extends Action
     /**
      * Get swagger object
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getSwagger()
     {
+        /** @var list<string>|string|null $exclude */
         $exclude = ArrayHelper::getValue($this->scanOptions, 'exclude');
+
+        /** @var string $pattern */
         $pattern = ArrayHelper::getValue($this->scanOptions, 'pattern',  '*.php');
+
+        /** @var string $version */
         $version = ArrayHelper::getValue($this->scanOptions, 'version', OpenApi::VERSION_3_0_0);
+
+        /** @var LoggerInterface $logger */
         $logger = ArrayHelper::getValue($this->scanOptions, 'logger', new CollectingLogger());
+
         $sourceFinder = new SourceFinder($this->scanDir, $exclude, $pattern);
         return (new Builder())
             ->setLogger($logger)
