@@ -4,11 +4,12 @@ use light\swagger\SwaggerUIAsset;
 use yii\helpers\Json;
 use yii\web\View;
 
-$bundle = SwaggerUIAsset::register($this);
-
+/** @var View $this */
 /** @var string $configurations */
 /** @var string $title */
-/** @var array $oauthConfiguration */
+/** @var array<string, mixed> $oauthConfiguration */
+
+$bundle = SwaggerUIAsset::register($this);
 
 ?><!-- HTML for static distribution bundle build -->
 <?php $this->beginPage() ?>

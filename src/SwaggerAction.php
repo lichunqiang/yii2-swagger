@@ -60,13 +60,13 @@ use yii\web\Response;
 class SwaggerAction extends Action
 {
     /**
-     * @var string|array The rest url configuration.
+     * @var string|array<array-key, mixed> The rest url configuration.
      * Check documentation for more information.
      * @see https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md
      */
     public $restUrl;
     /**
-     * @var array The OAuth configuration.
+     * @var array<string, mixed> The OAuth configuration.
      */
     public $oauthConfiguration = [];
     /**
@@ -80,13 +80,13 @@ class SwaggerAction extends Action
      */
     public $title = 'Swagger-ui';
     /**
-     * @var array The swagger-ui component configurations.
+     * @var array<string, mixed> The swagger-ui component configurations.
      * @see https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/configuration.md
      * @since 2.0.0
      */
     public $configurations = [];
     /**
-     * @var array Default swagger-ui configurations.
+     * @var array<string, mixed> Default swagger-ui configurations.
      * @since 2.0.0
      */
     protected $defaultConfigurations = [
@@ -103,53 +103,54 @@ class SwaggerAction extends Action
         'layout' => 'StandaloneLayout',
         'validatorUrl' => null,
     ];
-    
+
     /**
      * @inheritdoc
+     * @return string
      */
     public function run()
     {
         Yii::$app->getResponse()->format = Response::FORMAT_HTML;
-        
+
         $this->controller->layout = false;
-        
+
         $view = $this->controller->getView();
-        
+
         return $view->renderFile(__DIR__ . '/index.php', [
             'configurations' => $this->prepareConfiguration(),
             'oauthConfiguration' => $this->oauthConfiguration,
             'title' => $this->title,
         ], $this->controller);
     }
-    
+
     /**
      * @return string
      */
     protected function prepareConfiguration()
     {
         $configurations = array_merge($this->defaultConfigurations, $this->configurations);
-        
+
         if ($this->restUrl) {
             $configurations[is_array($this->restUrl) ? 'urls' : 'url'] = $this->restUrl;
         }
-        
+
         if (isset($configurations['plugins'])) {
             $configurations['plugins'] = array_map(
                 [$this, 'convertJsExpression'],
                 (array)$configurations['plugins']
             );
         }
-    
+
         if (isset($configurations['presets'])) {
             $configurations['presets'] = array_map(
                 [$this, 'convertJsExpression'],
                 (array)$configurations['presets']
             );
         }
-        
+
         return Json::encode($configurations);
     }
-    
+
     /**
      * @param string $str
      *
@@ -159,7 +160,7 @@ class SwaggerAction extends Action
     {
         return new JsExpression($str);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -173,7 +174,7 @@ class SwaggerAction extends Action
                 throw new InvalidArgumentException('Not valid class');
             }
         }
-        
+
         return parent::beforeRun();
     }
 }

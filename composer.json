@@ -10,10 +10,17 @@
       "email": "light-li@hotmail.com"
     }
   ],
+  "scripts": {
+    "phpstan": "./vendor/bin/phpstan"
+  },
   "require": {
     "yiisoft/yii2": "^2.0.0",
     "zircote/swagger-php": "^7.0",
     "bower-asset/swagger-ui": "^5.0"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^2.3",
+    "mspirkov/yii2-phpstan": "^0.17"
   },
   "minimum-stability": "stable",
   "autoload": {
